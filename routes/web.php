@@ -17,7 +17,7 @@ use App\Endereco;
 Route::get('/clientes', function(){
     $clientes = Cliente::all();
 
-    echo '<h1> Busca os dados de Endereço a partir do Cliente "hasOne" </h1>';
+    echo '<h1> Busca os dados de Endereço a partir do Cliente => relacionamento "hasOne" </h1>';
     foreach($clientes as $c){
         echo '<p>ID: '       . $c->id . ' </p>';  
         echo '<p>NOME: '     . $c->nome . ' </p>'; 
@@ -38,7 +38,7 @@ Route::get('/clientes', function(){
 Route::get('/enderecos', function(){
     $enderecos = Endereco::all();
 
-    echo '<h1> Busca os dados de Cliente a partir do Endereço "belongsTo" </h1>';
+    echo '<h1> Busca os dados de Cliente a partir do Endereço => relacionamento "belongsTo" </h1>';
 
     foreach($enderecos as $e){
         echo '<p>CLIENTE_ID: ' . $e->cliente_id . ' </p>';  
@@ -59,7 +59,7 @@ Route::get('/enderecos', function(){
 
 Route::get('/inserir', function(){
     $c = new Cliente();
-    $c->nome = "Fauto Manoel";
+    $c->nome = "Fausto Manoel";
     $c->telefone = "4555445544";
     $c->save();   
 
@@ -71,7 +71,9 @@ Route::get('/inserir', function(){
     $e->uf = "SP";
     $e->cep = "78900-865";
 
-    $c->endereco()->save($e);  // Salva Endereço diretamente no Cliente via relacionamento. Isso evita ter que regar o id do cliente inserido.
+    $c->endereco()->save($e);  
+    // Salva Endereço diretamente no Cliente via relacionamento. 
+    // Isso evita ter que regar o id do cliente inserido.
 
 
     $c = new Cliente();
@@ -98,12 +100,13 @@ Route::get('/clientes/json', function(){
 
     echo "<h1>Busca os dados de CLIENTE usando 'Lazy Loading' e 'Eager Loading'</h1>";
     
-    //echo "<h2>Por padrão o Laravel trata os relacionamentos como Lazy Loading = Carregamento Tardio </h2>";
-    //echo "<h2>Neste caso, retorna o Cliente sem o Endereço) </h2>";
-    //$clientes = Cliente::all();  // Padrão Lazy Loading = carregamento tardio (Retorna Cliente sem o Endereço)
+    echo "<h2>Por padrão o Laravel trata os relacionamentos como Lazy Loading = Carregamento Tardio </h2>";
 
-    echo "<h2>Carregamento Imediato com Eager Loading (Retorna o Cliente + Endereço)  </h2>";
-    $clientes = Cliente::with(['endereco'])->get(); // Eager Loading = Carregamento Imediato 
+    echo "<h2>Neste caso, retorna o Cliente sem o Endereço </h2>";
+    $clientes = Cliente::all();  // Padrão Lazy Loading = carregamento tardio (Retorna Cliente sem o Endereço)
+
+    //echo "<h2>Carregamento Imediato com Eager Loading (Retorna o Cliente + Endereço)  </h2>";
+    //$clientes = Cliente::with(['endereco'])->get(); // Eager Loading = Carregamento Imediato 
 
     return $clientes->toJson();
 });

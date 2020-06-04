@@ -13,13 +13,14 @@ class CreateEnderecosTable extends Migration
      */
     public function up()
     {
+        // Modelando o relacionamento 1 x 1, onde 1 cliente só pode ter 1 endereço.
         Schema::create('enderecos', function (Blueprint $table) {
-            //Modelando o relacionamento 1 x 1 
+            
+            $table->unsignedBigInteger('cliente_id');  // Cria o campo 'cliente_id' que será PK e FK ao mesmo tempo
+            
+            $table->foreign('cliente_id')->references('id')->on('clientes');   // Define a FK com 'cliente'
 
-            $table->unsignedBigInteger('cliente_id');  // Recebe a chave estrangeira de cliente
-            $table->foreign('cliente_id')->references('id')->on('clientes');
-
-            $table->primary('cliente_id'); // Define a chave primária como sendo a chave estrangeira de cliente
+            $table->primary('cliente_id'); // Define a PK de 'enderecos' como sendo a PK de 'clientes'
             // Isso evita que 1 cliente tenha mais de 1 endereço
 
             $table->integer('numero');
